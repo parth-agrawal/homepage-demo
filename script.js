@@ -401,6 +401,9 @@ function webcamInference() {
 
         ctx.scale(1, 1);
 
+
+        // setting the dimensions of video and canvas
+        // doesn't need to be in video render loop 
         var [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio] =
         getCoordinates(video, videoAspectRatio);
         canvas.width = dWidth;
@@ -424,9 +427,9 @@ function webcamInference() {
 
                     drawBoundingBoxes(predictions, canvas, ctx, scalingRatio, sx, sy);
             
-                    // if (!webcamLoop) {
-                    //     clearInterval(loopID);
-                    // }
+                    if (!webcamLoop) {
+                        clearInterval(loopID);
+                    }
                 });
                 });
             }, 1000 / 30);},
@@ -453,7 +456,7 @@ function getCoordinates(img, videoAspectRatio) {
     // sy and sx are the offset of the coordinates
     var sy;
     var sx;
-    var sWidth = img.width;
+    var sWidth = img.width; // set to incoming image width
     var sHeight = 0;
 
     var sx = 0;
