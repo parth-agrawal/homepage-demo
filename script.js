@@ -402,9 +402,9 @@ function webcamInference() {
         ctx.scale(1, 1);
 
 
-        // setting the dimensions of video and canvas
-        // doesn't need to be in video render loop 
-        var [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio] =
+        // setting the dimensions of video and canvas, doesn't need to be in video render loop 
+        // sWidth, sHeight, dx, dy are unused, but must be reset here because they are global variables
+        var [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio] = 
         getCoordinates(video, videoAspectRatio);
         canvas.width = dWidth;
         canvas.style.width = dWidth + "px";
