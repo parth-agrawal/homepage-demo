@@ -473,6 +473,59 @@ function getCoordinates(img, videoAspectRatio) {
     return [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio];
 }
 
+function getBase64Image(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+    var dataURL = canvas.toDataURL("image/jpeg");
+    return dataURL;
+}
+
+// used in index.html
+function imageInference(e) {
+    // replace canvas with image
+    document.getElementById("picture").style.display = "none";
+    document.getElementById("picture_canvas").style.display = "block";
+    document.getElementById("example_demo").style.display = "none";
+    document.getElementById("video_canvas").style.display = "none";
+
+    var canvas = document.getElementById("picture_canvas");
+    var ctx = canvas.getContext("2d");
+    var img = new Image();
+    img.src = e.src;
+    img.crossOrigin = "anonymous";
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    img.onload = function () {
+        setImageState(
+            LOADING_URL,
+            "picture_canvas"
+        );
+    var [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio] =
+        getCoordinates(img);
+
+    var base64 = getBase64Image(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+
+    apiRequest(base64).then(function (predictions) {
+        ctx.beginPath();
+        // draw image to canvas
+        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        var predictions = predictions.map(function (prediction) {
+            return {
+                bbox: { x: prediction.x, y: prediction.y, width: prediction.width, height: prediction.height},
+                class: prediction.class,
+                confidence: prediction.confidence,
+        }});
+
+        drawBoundingBoxes(predictions, canvas, ctx, scalingRatio, sx, sy, true);
+    });
+    };
+}
+
+
 
 function processDrop(e) {
     e.preventDefault();
