@@ -408,6 +408,11 @@ function webcamInference() {
         
                 var [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio] =
                 getCoordinates(video, videoAspectRatio);
+                canvas.width = dWidth;
+                canvas.style.width = dWidth + "px";
+                canvas.height = dHeight;
+                canvas.style.height = dHeight + "px";
+
                 model.then(function (model) {
                 model.detect(video).then(function (predictions) {
                     ctx.drawImage(video, 0, 0, width, height, 0, 0, dWidth, dHeight);
@@ -439,8 +444,8 @@ function getCoordinates(img, videoAspectRatio) {
 
     var dx = 0;
     var dy = 0;
-    var dWidth = 640;
-    var dHeight = 0; // we're going to dynamically set height based on video aspect ratio
+    var dWidth = 0; // we're going to dynamically set width based on video aspect ratio
+    var dHeight = 480; 
 
     var sy;
     var sx;
@@ -467,7 +472,8 @@ function getCoordinates(img, videoAspectRatio) {
         var sx = (imageWidth - sWidth) / 2;
     }
 
-    dHeight = dWidth / videoAspectRatio
+    dWidth = dHeight * videoAspectRatio
+    // dHeight = dWidth / videoAspectRatio
     sHeight = dHeight
     sWidth = dWidth
 
