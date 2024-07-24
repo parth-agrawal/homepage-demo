@@ -444,7 +444,6 @@ function webcamInference() {
 }
 
 function getCoordinates(img, videoAspectRatio) {
-    console.log("video aspect ratio", videoAspectRatio)
 
     var dx = 0;
     var dy = 0;
@@ -461,10 +460,6 @@ function getCoordinates(img, videoAspectRatio) {
     var sy = 0;
 
     dWidth = dHeight * videoAspectRatio
-
-    console.log("video aspect ratio", videoAspectRatio)
-    console.log("dWidth", dWidth)
-    console.log("dHeight", dHeight)
 
     // dWidth is width of the canvas we're drawing to
     // sWidth is the width of the original image
