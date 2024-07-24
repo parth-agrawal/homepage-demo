@@ -458,19 +458,22 @@ function getCoordinates(img, videoAspectRatio) {
     const canvasRatio = dWidth / dHeight;
     const imageRatio = imageWidth / imageHeight;
 
-    // scenario 1 - image is more vertical than canvas
-    if (canvasRatio >= imageRatio) {
-        var sx = 0;
-        var sWidth = imageWidth;
-        var sHeight = sWidth / canvasRatio;
-        var sy = (imageHeight - sHeight) / 2;
-    } else {
-    // scenario 2 - image is more horizontal than canvas
-        var sy = 0;
-        var sHeight = imageHeight;
-        var sWidth = sHeight * canvasRatio;
-        var sx = (imageWidth - sWidth) / 2;
-    }
+    // // scenario 1 - image is more vertical than canvas
+    // if (canvasRatio >= imageRatio) {
+    //     var sx = 0;
+    //     var sWidth = imageWidth;
+    //     var sHeight = sWidth / canvasRatio;
+    //     var sy = (imageHeight - sHeight) / 2;
+    // } else {
+    // // scenario 2 - image is more horizontal than canvas
+    //     var sy = 0;
+    //     var sHeight = imageHeight;
+    //     var sWidth = sHeight * canvasRatio;
+    //     var sx = (imageWidth - sWidth) / 2;
+    // }
+
+    var sx = 0;
+    var sy = 0;
 
     dWidth = dHeight * videoAspectRatio
     // dHeight = dWidth / videoAspectRatio
@@ -481,7 +484,8 @@ function getCoordinates(img, videoAspectRatio) {
     console.log("dWidth", dWidth)
     console.log("dHeight", dHeight)
 
-    var scalingRatio = videoAspectRatio
+    var scalingRatio = dWidth / sWidth;
+    // var scalingRatio = videoAspectRatio
 
     if (scalingRatio == Infinity) {
         scalingRatio = 1;
