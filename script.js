@@ -447,9 +447,10 @@ function getCoordinates(img, videoAspectRatio) {
     var dWidth = 0; // we're going to dynamically set width based on video aspect ratio
     var dHeight = 480; 
 
+    // sy and sx are the offset of the coordinates
     var sy;
     var sx;
-    var sWidth = 0;
+    var sWidth = img.width;
     var sHeight = 0;
 
     var imageWidth = img.width;
@@ -477,12 +478,15 @@ function getCoordinates(img, videoAspectRatio) {
 
     dWidth = dHeight * videoAspectRatio
     // dHeight = dWidth / videoAspectRatio
-    sHeight = dHeight
-    sWidth = dWidth
+    // sHeight = dHeight
+    // sWidth = dWidth
 
     console.log("video aspect ratio", videoAspectRatio)
     console.log("dWidth", dWidth)
     console.log("dHeight", dHeight)
+
+    // dWidth is width of the canvas we're drawing to
+    // sWidth is the width of the original image
 
     var scalingRatio = dWidth / sWidth;
     // var scalingRatio = videoAspectRatio
