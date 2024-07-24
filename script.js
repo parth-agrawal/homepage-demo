@@ -6,7 +6,7 @@ if (window.matchMedia("(max-width: 500px)").matches) {
     picture_canvas.width = width;
     picture_canvas.height = height;
 } else {
-    var width = 640;
+    var width = 640; // delete these if incoming video dimensions are overwriting them? 
     var height = 480;
 }
 
@@ -378,6 +378,11 @@ function webcamInference() {
         .then(function (stream) {
         // if video exists, show it
         // create video element
+        const settings = stream.getVideoTracks()[0].getSettings()
+        width = settings.width // override width and height with incoming video width and height
+        height = settings.height 
+        const videoAspectRatio = width / height
+
         var video = document.createElement("video");
         video.srcObject = stream;
         video.id = "video1";
@@ -388,6 +393,8 @@ function webcamInference() {
         video.style.height = height + "px";
         video.width = width;
         video.style.width = width + "px";
+
+        document.body.appendChild(video);
 
         var canvas = document.getElementById("video_canvas");
         var ctx = canvas.getContext("2d");
@@ -400,18 +407,18 @@ function webcamInference() {
             var loopID = setInterval(function () {
         
                 var [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio] =
-                getCoordinates(video);
+                getCoordinates(video, videoAspectRatio);
                 model.then(function (model) {
                 model.detect(video).then(function (predictions) {
-                    ctx.drawImage(video, 0, 0, width, height, 0, 0, width, height);
+                    ctx.drawImage(video, 0, 0, width, height, 0, 0, dWidth, dHeight);
 
                     ctx.beginPath();
 
                     drawBoundingBoxes(predictions, canvas, ctx, scalingRatio, sx, sy);
             
-                    if (!webcamLoop) {
-                        clearInterval(loopID);
-                    }
+                    // if (!webcamLoop) {
+                    //     clearInterval(loopID);
+                    // }
                 });
                 });
             }, 1000 / 30);},
@@ -427,11 +434,13 @@ function webcamInference() {
     }
 }
 
-function getCoordinates(img) {
+function getCoordinates(img, videoAspectRatio) {
+    console.log("video aspect ratio", videoAspectRatio)
+
     var dx = 0;
     var dy = 0;
     var dWidth = 640;
-    var dHeight = 480;
+    var dHeight = 0; // we're going to dynamically set height based on video aspect ratio
 
     var sy;
     var sx;
@@ -458,7 +467,15 @@ function getCoordinates(img) {
         var sx = (imageWidth - sWidth) / 2;
     }
 
-    var scalingRatio = dWidth / sWidth;
+    dHeight = dWidth / videoAspectRatio
+    sHeight = dHeight
+    sWidth = dWidth
+
+    console.log("video aspect ratio", videoAspectRatio)
+    console.log("dWidth", dWidth)
+    console.log("dHeight", dHeight)
+
+    var scalingRatio = videoAspectRatio
 
     if (scalingRatio == Infinity) {
         scalingRatio = 1;
