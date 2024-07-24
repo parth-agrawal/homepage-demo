@@ -6,7 +6,7 @@ if (window.matchMedia("(max-width: 500px)").matches) {
     picture_canvas.width = width;
     picture_canvas.height = height;
 } else {
-    var width = 640; // delete these if incoming video dimensions are overwriting them? 
+    var width = 640; // default values, overwritten by incoming video dimensions 
     var height = 480;
 }
 
