@@ -394,8 +394,6 @@ function webcamInference() {
         video.width = width;
         video.style.width = width + "px";
 
-        document.body.appendChild(video);
-
         var canvas = document.getElementById("video_canvas");
         var ctx = canvas.getContext("2d");
 
